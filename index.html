@@ -26,10 +26,90 @@
     .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
     .chip{background:var(--chip);border:1px solid #2a2f3a;color:var(--muted);padding:6px 10px;border-radius:999px;cursor:pointer}
     .chip.active{color:#fff;border-color:var(--acc)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:16px}
-    .card{background:var(--card);border:1px solid #232736;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
-    .thumb{aspect-ratio:16/9;background:#0f1117;position:relative}
-    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+	
+	/* Responsive grid — desktop uses multiple columns, mobile switches to full-width */
+	.grid {
+	  display: grid;
+	  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+	  gap: 22px;
+	  margin-top: 18px;
+	}
+
+	@media (max-width: 720px) {
+	  .grid {
+		grid-template-columns: 1fr; /* single column layout on small screens */
+		gap: 18px;
+	  }
+	}
+
+	/* Card styling with subtle hover and breathing pulse */
+	.card {
+	  background: var(--card);
+	  border: 1px solid #232736;
+	  border-radius: var(--radius);
+	  overflow: hidden;
+	  box-shadow: var(--shadow);
+	  display: flex;
+	  flex-direction: column;
+	  transition: transform 0.2s ease, box-shadow 0.2s ease;
+	  
+	}
+
+	.card:hover {
+	  transform: translateY(-3px);
+	  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+	}
+
+	/* Thumbnail size + slight floating depth */
+	.thumb {
+	  aspect-ratio: 16 / 9;
+	  background: #0f1117;
+	  position: relative;
+	  overflow: hidden;
+	}
+	.thumb img {
+	  width: 100%;
+	  height: 100%;
+	  object-fit: cover;
+	  display: block;
+	  transition: transform 0.8s ease;
+	}
+	.card:hover .thumb img {
+	  transform: scale(1.02);
+	}
+
+
+
+	/* Text layout tweaks */
+	.body { padding: 14px 16px; }
+	.titleLine {
+	  font-weight: 600;
+	  margin: 4px 0 8px;
+	  font-size: 1rem;
+	  line-height: 1.3;
+	}
+	.meta {
+	  font-size: 0.9rem;
+	  color: var(--muted);
+	}
+
+
+	/* Text adjustments for bigger cards */
+	.body {
+	  padding: 14px 16px;
+	}
+
+	.titleLine {
+	  font-weight: 600;
+	  margin: 4px 0 8px;
+	  font-size: 1rem;
+	  line-height: 1.3;
+	}
+	.meta {
+	  font-size: 0.9rem;
+	  color: var(--muted);
+	}
+
     .badge{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.15);padding:2px 8px;border-radius:999px;font-size:12px;color:#d9e2ef}
     .body{padding:12px 14px}
     .titleLine{font-weight:600;margin:2px 0 6px}
@@ -114,6 +194,25 @@
 	  display: block;
 	}
 
+	/* Gentle, single-shot pulse for sponsor logos */
+	@keyframes sponsorBreathe {
+	  0%, 100% { transform: scale(1); }
+	  40%      { transform: scale(1.10); }
+	  65%      { transform: scale(1.05); }
+	}
+
+
+	/* class applied by JS when a pulse is triggered */
+	.sponsor-breathe {
+	  animation: sponsorBreathe 2.2s ease-in-out 1;
+	}
+
+	/* Respect user accessibility setting */
+	@media (prefers-reduced-motion: reduce) {
+	  .sponsor-breathe { animation: none !important; }
+	}
+
+
 	/* text section */
 	.related-card .body {
 	  padding: 10px 12px;
@@ -149,6 +248,65 @@
 	  color: #5ab1ff;
 	}
 	
+	/* NAVBAR — keeps buttons and sponsors perfectly aligned horizontally */
+	.navbar {
+	  display: flex;
+	  align-items: center;          /* vertically center both buttons and logos */
+	  justify-content: space-between;
+	  gap: 16px;
+	  flex-wrap: nowrap;            /* prevent wrapping onto next line */
+	  margin-bottom: 10px;
+	  flex-shrink: 0;
+	  white-space: nowrap;
+	}
+
+	.nav-left {
+	  display: flex;
+	  align-items: center;
+	  gap: 8px;
+	}
+
+	/* SPONSOR BAR — compact right-side layout */
+	.sponsorbar-top {
+	  display: flex;
+	  align-items: center;
+	  justify-content: flex-end;
+	  gap: 10px;
+	  margin: 0;
+	  padding: 0;
+	  border: none;
+	}
+
+	.sponsorbar-top span.meta {
+	  font-size: 0.9em;
+	  color: var(--meta-color, #aaa);
+	}
+
+	.sponsorbar-top img {
+	  height: 36px;
+	  width: auto;
+	  opacity: 0.95;
+	  filter: saturate(0.95);
+	  transition: transform 0.2s ease;
+	}
+
+	.sponsorbar-top img:hover {
+	  transform: scale(1.05);
+	}
+
+	/* Responsive: stack only if viewport is narrow */
+	@media (max-width: 640px) {
+	  .navbar {
+		flex-wrap: wrap;            /* allow stacking on very small screens */
+		justify-content: center;
+	  }
+	  .sponsorbar-top {
+		justify-content: center;
+		margin-top: 6px;
+	  }
+	}
+
+
   </style>
 </head>
 <body>
@@ -169,11 +327,16 @@
       </div>
     </header>
 
-    <nav>
-      <a class="btn" href="#" id="navArchive">Archive</a>
-      <a class="btn" href="#support">Support</a>
-      <a class="btn" href="#contact">Contact</a>
-    </nav>
+	<nav class="navbar">
+	  <div class="nav-left">
+		<a class="btn" href="#" id="navArchive">Archive</a>
+		<a class="btn" href="#support">Support</a>
+		<a class="btn" href="#contact">Contact</a>
+	  </div>
+
+	  <!-- New top sponsor bar -->
+	  <div id="sponsorbar-top" class="sponsorbar sponsorbar-top" aria-label="Sponsors"></div>
+	</nav>
 
     <div id="archive">
       <div class="chips" id="chips"></div>
@@ -437,6 +600,7 @@ async function loadData(){
       SPONSORS = SPONSORS_FALLBACK;
     }
   }
+  renderSponsors('#sponsorbar-top');
 }
 
 
@@ -776,10 +940,56 @@ function validateVideoIDs(list){
   else console.log('✅ ID validation complete:', list.length, 'entries');
 }
 
+
+let sponsorPulseTimer = null;
+
+function startSponsorBreathing() {
+  // Accessibility: don't animate if user prefers reduced motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const bar = document.querySelector('#sponsorbar-top');
+  if (!bar) return;
+
+  // clear any old interval (in case we re-rendered)
+  if (sponsorPulseTimer) clearInterval(sponsorPulseTimer);
+
+  const pulse = () => {
+    const imgs = Array.from(bar.querySelectorAll('img'));
+    if (!imgs.length) return;
+    const el = imgs[Math.floor(Math.random() * imgs.length)];
+    // restart animation by toggling the class
+    el.classList.remove('sponsor-breathe');
+    // force reflow so the animation can replay
+    void el.offsetWidth;
+    el.classList.add('sponsor-breathe');
+  };
+
+  // fire occasionally; first after a short delay so page settles
+  setTimeout(pulse, 1500);
+  sponsorPulseTimer = setInterval(pulse, 15000);
+}
+
+
 // ======= Init =======
 loadData()
-  .then(()=>{ validateVideoIDs(VIDEOS); buildChips(); route(); })
-  .catch(e=>{ console.error('Data load failed', e); if(!VIDEOS.length) VIDEOS = VIDEOS_FALLBACK; if(!SPONSORS.length) SPONSORS = SPONSORS_FALLBACK; validateVideoIDs(VIDEOS); buildChips(); route(); });
+  .then(()=>{
+    validateVideoIDs(VIDEOS);
+    buildChips();
+    renderSponsors('#sponsorbar-top');   // existing
+    startSponsorBreathing();             // ← add this
+    route();
+  })
+  .catch(e=>{
+    console.error('Data load failed', e);
+    if (!VIDEOS.length) VIDEOS = VIDEOS_FALLBACK;
+    if (!SPONSORS.length) SPONSORS = SPONSORS_FALLBACK;
+    validateVideoIDs(VIDEOS);
+    buildChips();
+    renderSponsors('#sponsorbar-top');
+    startSponsorBreathing();             // ← add here too
+    route();
+  });
+
 
 // Client-side Archive navigation to avoid sandbox navigation blocks
 const navArchive = document.getElementById('navArchive');
