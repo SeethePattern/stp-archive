@@ -1,4 +1,14 @@
 id,title,url,date,topics,notes,thumb,ref_papers,ref_books,ref_talks,ref_datasets,ref_other,related
+20251206-long,The Cosmic Speed Problem Nobody Can Explain,https://youtu.be/R4uxL4FUU8M,2025-12-06,ΛCDM;CMBR;Redshift,"A new measurement of the Solar System’s motion just revealed something nobody expected: we’re moving far faster than the standard model of cosmology says we should be. And if this result is correct… it raises a problem far bigger than a single number.
+
+In this video, we dive into the new radio-galaxy dipole study, compare it to the CMB dipole, and explore why the speed lines up in direction but not in magnitude. This mismatch has been quietly growing across multiple surveys, and now it’s becoming impossible to ignore.
+
+Is this a catalogue issue? A misunderstanding of redshift?
+Or a deeper flaw in how we think about the “cosmic rest frame” itself?
+
+I’ll walk you through the evidence, the assumptions, and the implications for cosmology and why this might be one of the most important puzzles in modern astrophysics.
+",,"Böhme, L et al (2025). Overdispersed Radio Source Counts and Excess Radio Dipole Detection. Phys. Rev. Lett. 135, 201001 – Published 10 November, 2025|https://journals.aps.org/prl/abstract/10.1103/6z32-3zf4;
+Singal, A. K. (2025). Solar peculiar motion inferred from dipole anisotropy in redshift distribution of quasars appears to lie along the Galactic Centre direction. Scientific Reports, 15, 31805.|https://arXiv.org/abs/2508.20769",,,,,20250607-long
 20251116-long,Why Alternatives Can’t Pass Cosmology’s Big Test,https://youtu.be/g7_JZJzVuqs,2025-11-16,ΛCDM;CMBR;Plasma Cosmology;Alternative Cosmology,"The CMB power spectrum is often treated as the final barrier every cosmological model must pass. But what happens when the test is built on assumptions unique to ΛCDM? This video explores how circular reasoning, tuning, and hidden dependencies create a perfect closed loop — one that locks out alternative theories before they even begin.",,,"Unnikrishnan, C. S. (2022). Cosmic Relativity: The Fundamental Theory of Relativity, Gravitation and Cosmology. World Scientific Publishing. (→ Proposes that relativity and inertia arise from interaction with a real cosmic gravitational background, offers a living-field interpretation of the CMB.)|https://doi.org/10.1142/q0401;Peratt, A. L. (2015). Physics of the Plasma Universe (2nd ed.). Springer. 
 (→ Foundational text on cosmic-scale plasma processes, current-driven filaments, double layers, and laboratory analogs of large-scale structure.)|https://doi.org/10.1007/978-1-4614-0253-2;
 

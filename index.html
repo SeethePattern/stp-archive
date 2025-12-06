@@ -908,12 +908,26 @@ function goArchive(){
 
 function route(){
   const p = new URLSearchParams(location.search);
+  const hash = (location.hash || '').replace('#','');
+
+  // Hash routes take precedence over ?v=…
+  if(hash === 'support'){
+    // ensure we drop ?v=… from the URL
+    history.replaceState(null, '', location.pathname + '#support');
+    renderSponsors('#sponsorbar-support'); wireStaticLinks(); showSection('#support');
+    return;
+  }
+  if(hash === 'contact'){
+    history.replaceState(null, '', location.pathname + '#contact');
+    renderSponsors('#sponsorbar-contact'); wireStaticLinks(); showSection('#contact');
+    return;
+  }
+
+  // Detail route (only if no overriding hash)
   const vid = p.get('v');
-  const hash = location.hash.replace('#','');
   if(vid){ showDetail(vid); return; }
-  if(hash === 'support'){ renderSponsors('#sponsorbar-support'); wireStaticLinks(); showSection('#support'); return; }
-  if(hash === 'contact'){ renderSponsors('#sponsorbar-contact'); wireStaticLinks(); showSection('#contact'); return; }
-  // default: archive
+
+  // Default: archive view (respect query params)
   const topics = (p.get('topics')||'').split(',').filter(Boolean);
   if(topics.length) state.topics = new Set(topics);
   const sort = p.get('sort');
@@ -996,6 +1010,27 @@ const navArchive = document.getElementById('navArchive');
 if(navArchive){ navArchive.addEventListener('click', (e)=>{ e.preventDefault(); goArchive(); }); }
 const backArchive = document.getElementById('backArchive');
 if(backArchive){ backArchive.addEventListener('click', (e)=>{ e.preventDefault(); goArchive(); }); }
+
+
+// Support nav
+const navSupport = document.querySelector('a[href="#support"]');
+if (navSupport) {
+  navSupport.addEventListener('click', (e) => {
+    e.preventDefault();
+    history.pushState(null, '', location.pathname + '#support');
+    route();
+  });
+}
+
+// Contact nav
+const navContact = document.querySelector('a[href="#contact"]');
+if (navContact) {
+  navContact.addEventListener('click', (e) => {
+    e.preventDefault();
+    history.pushState(null, '', location.pathname + '#contact');
+    route();
+  });
+}
 
 // Tiny export helper (exports current in-memory VIDEOS)
 $('#export').addEventListener('click', e =>{
