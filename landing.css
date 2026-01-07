@@ -1,0 +1,113 @@
+:root{
+  --bg:#0b0c10;
+  --card:#12141a;
+  --text:#e7eaf0;
+  --meta:#a9b0be;
+  --border:#22304a;
+  --btn:#101826;
+  --btnHover:#16233a;
+}
+
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif
+}
+a{color:inherit}
+
+.wrap{max-width:980px;margin:0 auto;padding:24px 18px 28px}
+
+.hero{margin:8px 0 18px}
+.siteTitle{font-size:20px;font-weight:700;letter-spacing:.2px}
+.siteTitle span{opacity:.7;font-weight:600}
+.tagline{margin:8px 0 0;color:var(--meta)}
+
+.grid{
+  display:grid;
+  gap:14px;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+@media (max-width:760px){
+  .grid{grid-template-columns:1fr}
+}
+
+.card{
+  padding:18px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.00));
+  box-shadow:0 10px 24px rgba(0,0,0,.25);
+}
+
+.cardRow{
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+}
+
+.cardIcon{
+  width:150px;
+  height:150px;
+  flex:0 0 150px;
+  border-radius:18px;
+  object-fit:contain;
+  opacity:0.95;
+
+  border:0px solid var(--border);
+  background: rgba(255,255,255,0.0);
+
+  padding:8px;
+}
+
+.cardContent h2{
+  margin:0;
+  font-size:16px;
+}
+
+.meta{
+  margin:8px 0 0;
+  color:var(--meta);
+}
+
+.actions{margin-top:14px}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--btn);
+  text-decoration:none;
+  font-weight:600;
+}
+
+.btn:hover{background:var(--btnHover)}
+
+.foot{
+  margin-top:20px;
+  color:var(--meta);
+  font-size:12px;
+}
+
+@media (max-width:640px){
+  .cardIcon{ width:64px; height:64px; flex-basis:64px; }
+}
+
+.iconLink{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  border-radius:18px; /* match your icon radius */
+  text-decoration:none;
+}
+
+.iconLink:focus-visible{
+  outline:2px solid rgba(255,255,255,0.35);
+  outline-offset:3px;
+}
