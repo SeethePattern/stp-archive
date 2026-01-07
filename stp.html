@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/jpg" href="img/logo.jpg">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>See the Pattern · Video Archive</title>
+  <meta name="description" content="Browse See the Pattern videos by topic. Lightweight, fast, no embeds — thumbnails, links, references, and sponsor placements." />
+  
+  <!-- Shared archive styles -->
+  <link rel="stylesheet" href="archive.css">
+
+  <!-- Archive configuration (MUST come before archive.js) -->
+  <script>
+	window.ARCHIVE = {
+	  name: "See the Pattern",
+	  csv: "data/videos_stp.csv",
+	  otherCsv: "data/videos_reflections.csv",
+	  self: "stp.html",
+	  other: "reflections.html",
+	  reflectionPrefix: "REF-"
+	};
+
+  </script>
+
+	<style>
+	  :root{
+		--hdr-image: url("img/logo.jpg");
+		--hdr-opacity: 0.12;
+	  }
+	</style>
+
+  <!-- Shared archive engine -->
+  <script src="archive.js" defer></script>
+</head>
+
+  
+  <body>
+  <div class="wrap">
+    <header>
+      <div class="title">See the Pattern <span>· archive</span></div>
+      <div class="controls" id="controls">
+        <input id="q" type="search" placeholder="Search titles & notes… (e.g. plasma, CMB, SN1a)" />
+        <select id="sort">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+        </select>
+		<button id="compactBtn" class="btn" type="button" title="Toggle compact card layout">
+			Compact cards
+		</button>
+      </div>
+    </header>
+
+	<nav class="navbar">
+	  <div class="nav-left">
+		<a class="btn" href="#" id="navArchive">Archive</a>
+		<a class="btn" href="#support">Support</a>
+		<a class="btn" href="#contact">Contact</a>
+		<a class="btn" href="#" id="navSwitch"></a>
+
+	  </div>
+
+	  <!-- New top sponsor bar -->
+	 <div id="sponsorbar-top" class="sponsorbar-top" aria-label="Sponsors">
+    <span class="meta" style="visibility:hidden">Supported by</span>
+	</div>
+	</nav>
+
+    <div id="archive">
+      <div class="chips" id="chips"></div>
+      <div class="count" id="count"></div>
+      <div id="grid" class="grid"></div>
+      <div id="empty" class="empty" style="display:none">No results. Try clearing filters.</div>
+      <div id="sponsorbar-archive" class="sponsorbar"></div>
+    </div>
+
+    <div id="detail">
+      <a class="back" href="#" id="backArchive">← Back to archive</a>
+      <div class="detailHead">
+        <div id="dTitle" class="title" style="font-size:18px"></div>
+        <span id="dDate" class="pill"></span>
+        <span id="dTopics" class="pill"></span>
+      </div>
+      <div class="thumb" style="max-width:760px;border-radius:12px;overflow:hidden">
+        <img id="dThumb" alt="" width="640" height="360" loading="lazy" decoding="async" />
+        <span id="dBadge" class="badge"></span>
+      </div>
+      <div class="actions" style="margin-top:12px">
+        <a id="dWatch" class="btn" target="_blank" rel="noopener">Watch on YouTube</a>
+      </div>
+      <p id="dNotes" class="meta" style="margin-top:10px"></p>
+      <div class="divider"></div>
+      <section id="refs"></section>
+	  <section id="related"></section>
+      <div id="sponsorbar-detail" class="sponsorbar"></div>
+    </div>
+
+    <section id="support" style="display:none">
+      <h2 style="margin:6px 0 10px">Support See the Pattern</h2>
+      <p class="meta">If you find the work valuable, here are simple ways to support it. Thank you for helping keep the research and edits going.</p>
+      <div class="actions">
+        <a class="btn" id="lPatreon" target="_blank" rel="noopener">Patreon</a>
+        <a class="btn" id="lKofi" target="_blank" rel="noopener">Ko‑fi</a>
+        <a class="btn" id="lPaypal" target="_blank" rel="noopener">PayPal</a>
+        <a class="btn" id="lMerch" target="_blank" rel="noopener">Merch</a>
+      </div>
+      <div class="divider"></div>
+      <p class="meta">Prefer to share instead? A direct link to a favourite episode helps more than you think.</p>
+      <div id="sponsorbar-support" class="sponsorbar"></div>
+    </section>
+
+    <section id="contact" style="display:none">
+      <h2 style="margin:6px 0 10px">Contact & Commercial Inquiries</h2>
+      <p class="meta">For sponsorships, speaking, or collaboration proposals, please email:</p>
+      <p><a class="btn" id="bizEmail"></a></p>
+      <ul class="meta" style="margin-top:10px">
+        <li>Audience: science‑curious, long‑form video viewers (cosmology, plasma physics, alternative models).</li>
+        <li>Formats: 30–60s integrations; sponsor logo on website (time‑boxed); dedicated landing links.</li>
+        <li>We value relevance and integrity. Products/services must genuinely serve the audience.</li>
+      </ul>
+      <div class="divider"></div>
+      <p class="meta">Press/media: please include deadlines and time zones. A short brief helps accelerate a response.</p>
+      <div id="sponsorbar-contact" class="sponsorbar"></div>
+    </section>
+
+    <footer>Plain HTML. No embeds. Thumbnails + deep links to YouTube. · <a href="#" id="shareArchive">Download full video list (JSON)</a></footer>
+  </div>
+
+</body>
+</html>
