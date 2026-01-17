@@ -1,4 +1,18 @@
 id,title,url,date,topics,notes,thumb,ref_papers,ref_books,ref_talks,ref_datasets,ref_other,related
+20260117-long,New Survey Tests Modern Cosmology's Core Assumption,https://youtu.be/B1cDrEL0B5A,2026-01-17,ΛCDM;Timeline;Structure Formation,"Modern cosmology is built on a foundational assumption: that on large enough scales, the universe becomes homogeneous and matter settles into a well-defined average density.
+
+A new generation of galaxy surveys has now tested that assumption directly.
+
+Instead of assuming homogeneity and building models around it, these surveys measure how density behaves as scale increases and ask a simple question: does the universe actually settle into an average?
+
+The answer is not based on a single structure or an isolated anomaly. Across the largest scales probed, structure persists where uniformity is expected, and the measured density does not clearly converge.
+
+This creates a deeper problem than is often discussed. If average density depends on how and where it is measured, then concepts like a single cosmic background or a single global expansion rate become less automatic.
+
+This video examines what the survey data actually shows, how it is normally interpreted in standard cosmology, and why testing homogeneity directly leads to a very different picture of the universe.
+
+Not because the data is flawed, but because the assumption behind its interpretation is finally being questioned.",,"Francesco Sylos Labini et al. (2025). Galaxy correlations from the DESI survey: no transition to homogeneity up to 400 Mpc/h. arXiv:2511.21585. (→ Analyzes galaxy correlations using DESI data and finds no clear transition to homogeneity up to the largest scales probed.)|https://arxiv.org/abs/2511.21585
+","Peebles, P. J. E. (1993). Principles of Physical Cosmology. Princeton University Press. (→ Standard reference outlining the cosmological principle and the assumption of large-scale homogeneity used in modern cosmology.)|https://press.princeton.edu/books/paperback/9780691209814/principles-of-physical-cosmology",,"DESI Collaboration. The Dark Energy Spectroscopic Instrument (DESI). Lawrence Berkeley National Laboratory. (→ Official project site describing the DESI survey, its goals, instrumentation, and large-scale structure measurements.)|https://www.desi.lbl.gov/",,20251028-long
 20251221-long,A Doorway to a New Cosmology | Cosmic Relativity,https://youtu.be/KZx_vDWpOnU,2025-12-21,ΛCDM;CMBR;Alternative Cosmology;Physics,"For over a century, modern cosmology has been built around a familiar framework — expanding space, fixed constants, and a universe that began in a hot, dense state.
 Yet for many, that picture has begun to feel increasingly strained.
 
