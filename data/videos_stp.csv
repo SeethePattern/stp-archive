@@ -1,4 +1,19 @@
-id,title,url,date,topics,notes,thumb,ref_papers,ref_books,ref_talks,ref_datasets,ref_other,related
+sheet=videos row=2 col=5 value=Timeline old=ΛCDM,title,url,date,topics,notes,thumb,ref_papers,ref_books,ref_talks,ref_datasets,ref_other,related
+20260131-long,The Time Reversal Experiment Shows More Than Anyone Is Saying,https://youtu.be/6eGZsvBCmuk,2026-01-31,ΛCDM; Physics; Light; Redshift,"A recent experiment has been widely reported as a reversal of time itself. Waves reflected not in space, but in time. Cause and effect apparently running backwards.
+
+But when you look closely, something about that framing does not sit quite right.
+
+Time never actually runs backward. Nothing rewinds. Nothing violates causality. Yet the experiment clearly shows something real and measurable.
+
+So what did it actually demonstrate?
+
+This video takes the headlines apart and looks carefully at what the experiment did, what it did not do, and why it is being described the way it is.
+
+Along the way, it raises a deeper question about how we think light is allowed to interact with its environment, and whether some possibilities are dismissed not because physics forbids them, but because they sit outside the frameworks we are used to using.
+
+The experiment does not overturn existing models. But it does quietly reopen a door many assume is closed.",,"Moussa, Hady et al. (2022). Observation of Temporal Reflections and Broadband Frequency Translations at Photonic Time-Interfaces. arXiv:2208.07236.
+Reports the first observation of photonic time-reflections and associated broadband frequency translation at engineered time-interfaces in metamaterials, establishing foundational building blocks for time-metamaterials and extreme photon manipulation. |https://arxiv.org/abs/2208.07236",,,,"Popular Mechanics (2023). Time reflections are real, scientists confirm.
+News article discussing experimental observation of time reflections and the broader context of time-interface research. |https://www.popularmechanics.com/science/a69717180/time-reflections-are-real-scientists-confirm/",
 20260117-long,Two Different Universes from the Same Data,https://youtu.be/R6W7P7IHLbI,2026-01-17,ΛCDM;Timeline;Structure Formation,"Modern cosmology is built on a foundational assumption: that on large enough scales, the universe becomes homogeneous and matter settles into a well-defined average density.
 
 A new generation of galaxy surveys has now tested that assumption directly.
