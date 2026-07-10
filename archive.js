@@ -190,19 +190,14 @@ function mapVideoRow(row){
 async function loadData(){
   // ---- Load SELF archive into VIDEOS ----
   try {
-    // Try JSON first (legacy)
-    VIDEOS = await loadJSON('data/videos.json');
-    console.log('Loaded videos.json');
-  } catch {
-    try {
-      const csvPath = window.ARCHIVE?.csv || 'data/videos.csv';
-      const csv = await loadText(csvPath);
-      VIDEOS = parseCSV(csv).map(mapVideoRow);
-      console.log('Loaded', csvPath, ':', VIDEOS.length, 'entries');
-    } catch {
-      console.warn('Using fallback VIDEOS');
-      VIDEOS = VIDEOS_FALLBACK;
-    }
+    const csvPath = window.ARCHIVE?.csv || 'data/videos.csv';
+    const csv = await loadText(csvPath);
+    VIDEOS = parseCSV(csv).map(mapVideoRow);
+    console.log('Loaded', csvPath, ':', VIDEOS.length, 'entries');
+  } catch (e) {
+    console.warn('Could not load video CSV:', e);
+    console.warn('Using fallback VIDEOS');
+    VIDEOS = VIDEOS_FALLBACK;
   }
 
   // ---- Load OTHER archive (for cross-archive related lookups) ----
@@ -224,17 +219,15 @@ async function loadData(){
     if(v && v.id) ALL_BY_ID.set(String(v.id), v);
   }
 
-  // ---- Sponsors (unchanged) ----
+  // ---- Sponsors ----
   try {
-    SPONSORS = await loadJSON('data/sponsors.json');
-  } catch {
-    try {
-      const csv = await loadText('data/sponsors.csv');
-      SPONSORS = parseCSV(csv);
-    } catch {
-      console.warn('Using fallback SPONSORS');
-      SPONSORS = SPONSORS_FALLBACK;
-    }
+    const csv = await loadText('data/sponsors.csv');
+    SPONSORS = parseCSV(csv);
+    console.log('Loaded sponsors.csv:', SPONSORS.length, 'entries');
+  } catch (e) {
+    console.warn('Could not load sponsors.csv:', e);
+    console.warn('Using fallback SPONSORS');
+    SPONSORS = SPONSORS_FALLBACK;
   }
 
   renderSponsors('#sponsorbar-top');
@@ -314,8 +307,16 @@ function applyFilters(){
 
 
 	function renderArchive(){
-	  qEl.value = state.q;
-	  sortEl.value = state.sort;
+      qEl.value = state.q;
+      sortEl.value = state.sort;
+
+      gridEl.setAttribute('aria-busy', 'false');
+      chipsEl.removeAttribute('aria-hidden');
+      chipsEl.classList.remove('loading-chips');
+
+      $$('.chip').forEach(ch =>
+        ch.classList.toggle('active', state.topics.has(ch.textContent))
+      );
 	  $$('.chip').forEach(ch => ch.classList.toggle('active', state.topics.has(ch.textContent)));
 
 	  const rows = applyFilters();

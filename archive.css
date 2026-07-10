@@ -118,6 +118,97 @@
 	  }
 	}
 
+
+    /* ===== Archive loading placeholders ===== */
+
+    .skeleton-card {
+      pointer-events: none;
+      min-height: 535px;
+      overflow: hidden;
+    }
+
+    .skeleton-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #191c24;
+    }
+
+    .skeleton-body {
+      min-height: 180px;
+      padding: 16px;
+    }
+
+    .skeleton-line {
+      height: 14px;
+      margin-bottom: 12px;
+      border-radius: 7px;
+      background: #242832;
+    }
+
+    .skeleton-title {
+      width: 78%;
+      height: 18px;
+    }
+
+    .skeleton-short {
+      width: 56%;
+    }
+
+
+    #chips {
+      min-height: 102px;
+      align-content: flex-start;
+    }
+    
+    @media (max-width: 700px) {
+      #chips {
+        min-height: 190px;
+      }
+}
+
+    .chip-skeleton {
+      display: inline-block;
+      width: 86px;
+      height: 30px;
+      border-radius: 999px;
+      background: #1a1d25;
+    }
+
+    .chip-skeleton:nth-child(3n) {
+      width: 120px;
+    }
+
+    .chip-skeleton:nth-child(4n) {
+      width: 70px;
+    }
+
+    .skeleton-card,
+    .chip-skeleton,
+    .skeleton-line,
+    .skeleton-thumb {
+      animation: skeleton-pulse 1.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes skeleton-pulse {
+      from {
+        opacity: 0.48;
+      }
+
+      to {
+        opacity: 0.82;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .skeleton-card,
+      .chip-skeleton,
+      .skeleton-line,
+      .skeleton-thumb {
+        animation: none;
+      }
+    }
+
+
 	/* Card styling with subtle hover and breathing pulse */
 	.card {
 	  background: var(--card);
