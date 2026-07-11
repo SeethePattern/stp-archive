@@ -311,6 +311,9 @@ function activeSponsors(){
 }
 function renderSponsors(targetId){
   const el = $(targetId);
+
+  if(!el) return;
+
   const live = activeSponsors();
   el.innerHTML = '';
   if(!live.length) return;
@@ -806,7 +809,18 @@ loadData()
     buildChips();
     renderSponsors('#sponsorbar-top');   // existing
     startSponsorBreathing();             // ← add this
-    route();
+    const hasSpecialRoute =
+      location.hash === '#support' ||
+      location.hash === '#contact' ||
+      new URLSearchParams(location.search).has('v');
+
+    if(hasSpecialRoute){
+      route();
+    } else {
+      state.source = 'all';
+      renderArchive();
+      showSection('#archive');
+    }
   })
   .catch(e=>{
     console.error('Data load failed', e);
@@ -816,7 +830,18 @@ loadData()
     buildChips();
     renderSponsors('#sponsorbar-top');
     startSponsorBreathing();             // ← add here too
-    route();
+    const hasSpecialRoute =
+      location.hash === '#support' ||
+      location.hash === '#contact' ||
+      new URLSearchParams(location.search).has('v');
+
+    if(hasSpecialRoute){
+      route();
+    } else {
+      state.source = 'all';
+      renderArchive();
+      showSection('#archive');
+    }
   });
 
 
