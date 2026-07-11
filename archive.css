@@ -13,6 +13,11 @@
     .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
     input[type="search"], select{background:var(--card);border:1px solid #232736;color:var(--text);border-radius:12px;padding:10px 12px;min-width:240px;box-shadow:var(--shadow)}
     nav .btn{display:inline-flex;align-items:center;gap:8px;background:#101319;border:1px solid #22304a;padding:8px 10px;border-radius:10px;color:#dfe7ff;margin-right:8px}
+    nav .btn.active {
+      color: #fff;
+      border-color: var(--acc);
+      background: #141b24;
+    }
     nav .btn:hover{background:#0e1118}
     .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
     .chip{background:var(--chip);border:1px solid #2a2f3a;color:var(--muted);padding:6px 10px;border-radius:999px;cursor:pointer}
@@ -428,11 +433,42 @@
 	  min-height: 52px;             /* NEW: reserve navbar height to reduce CLS */
 	}
 
-	.nav-left {
-	  display: flex;
-	  align-items: center;
-	  gap: 8px;
-	}
+    .nav-left {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .source-nav,
+    .site-nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .source-nav-label {
+      color: var(--muted);
+      font-size: 14px;
+      margin-right: 2px;
+    }
+    
+    .source-filter.active {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #071018;
+      font-weight: 600;
+      box-shadow: 0 0 0 1px var(--acc);
+    }    
+
+    [data-source-filter].active {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #071018;
+      font-weight: 600;
+      box-shadow: 0 0 0 1px var(--acc);
+    }
 
 	/* SPONSOR BAR — compact right-side layout */
 	.sponsorbar-top {
@@ -445,6 +481,8 @@
 	  border: none;
 	  min-height: 40px;             /* NEW: reserve space even before logos load */
 	}
+
+
 
 	.sponsorbar-top span.meta {
 	  font-size: 0.9em;

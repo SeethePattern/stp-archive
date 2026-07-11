@@ -54,13 +54,36 @@
     </header>
 
 	<nav class="navbar">
-	  <div class="nav-left">
-		<a class="btn" href="#" id="navArchive">Archive</a>
-		<a class="btn" href="#support">Support</a>
-		<a class="btn" href="#contact">Contact</a>
-		<a class="btn" href="#" id="navSwitch"></a>
+    <div class="nav-left">
 
-	  </div>
+      <div class="source-nav" aria-label="Filter videos by platform">
+        <span class="source-nav-label">Show:</span>
+
+        <a
+          class="btn source-filter"
+          href="#archive"
+          data-source-filter="all"
+        >All videos</a>
+
+        <a
+          class="btn source-filter"
+          href="?source=youtube"
+          data-source-filter="youtube"
+        >YouTube videos</a>
+
+        <a
+          class="btn source-filter"
+          href="?source=patreon"
+          data-source-filter="patreon"
+        >Patreon videos</a>
+      </div>
+
+      <div class="site-nav">
+        <a class="btn" href="#support">Support</a>
+        <a class="btn" href="#contact">Contact</a>
+      </div>
+
+    </div>
 
 	  <!-- New top sponsor bar -->
 	 <div id="sponsorbar-top" class="sponsorbar-top" aria-label="Sponsors">
