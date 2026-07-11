@@ -147,6 +147,46 @@ function ytIdFromUrl(u){
   }catch{ return ''; }
 }
 
+function videoSource(url){
+  if(!url) return 'other';
+
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+
+    if (
+      host === 'youtu.be' ||
+      host === 'youtube.com' ||
+      host.endsWith('.youtube.com')
+    ) {
+      return 'youtube';
+    }
+
+    if (
+      host === 'patreon.com' ||
+      host.endsWith('.patreon.com')
+    ) {
+      return 'patreon';
+    }
+
+    return 'other';
+  } catch {
+    return 'other';
+  }
+}
+
+function watchLabel(url){
+  switch(videoSource(url)){
+    case 'youtube':
+      return 'Watch on YouTube';
+
+    case 'patreon':
+      return 'Watch on Patreon';
+
+    default:
+      return 'Watch video';
+  }
+}
+
 function upgradeYouTubeThumb(imgEl, videoUrl){
   const id = ytIdFromUrl(videoUrl);
   if(!id || !imgEl) return;
@@ -161,15 +201,26 @@ function mapVideoRow(row){
 
   const url = (row.url||'').trim();
 
-  // thumbnail: CSV > YouTube fallback
-  const yt  = ytIdFromUrl(url);
-  let thumb = (row.thumb||'').trim();
-  if(!thumb && yt) thumb = `https://img.youtube.com/vi/${yt}/hqdefault.jpg`;
+    // Thumbnail priority:
+    // 1. Explicit CSV thumbnail
+    // 2. Automatic YouTube thumbnail
+    // 3. Generic local fallback
+    const yt = ytIdFromUrl(url);
+    let thumb = (row.thumb || '').trim();
+
+    if (!thumb && yt) {
+      thumb = `https://img.youtube.com/vi/${yt}/hqdefault.jpg`;
+    }
+
+    if (!thumb) {
+      thumb = 'img/default-thumbnail.jpg';
+    }
 
   return {
     id,
     title: row.title || '',
     url,
+    source: videoSource(url),
     date:  (row.date || '').trim(),
     topics: (row.topics || '').split(';').map(s=>s.trim()).filter(Boolean),
     thumb,
@@ -273,7 +324,12 @@ function renderSponsors(targetId){
   }
 }
 
-let state = { q: new URLSearchParams(location.search).get('q') || '', topics: new Set(), sort: 'newest' };
+let state = {
+  q: new URLSearchParams(location.search).get('q') || '',
+  topics: new Set(),
+  sort: 'newest',
+  source: 'all'
+};
 
 function buildChips(){
   chipsEl.innerHTML = '';
@@ -293,6 +349,11 @@ function applyFilters(){
     const q = state.q.toLowerCase();
     out = out.filter(v => (v.title+" "+(v.notes||'')).toLowerCase().includes(q));
   }
+  
+  if(state.source !== 'all'){
+      out = out.filter(v => v.source === state.source);
+    }
+  
   if(state.topics.size){
     out = out.filter(v => v.topics && v.topics.some(t => state.topics.has(t)));
   }
@@ -309,6 +370,19 @@ function applyFilters(){
 	function renderArchive(){
       qEl.value = state.q;
       sortEl.value = state.sort;
+      
+    $$('[data-source-filter]').forEach(link => {
+      link.classList.toggle(
+        'active',
+        link.dataset.sourceFilter === state.source
+      );
+
+      link.setAttribute(
+        'aria-current',
+        link.dataset.sourceFilter === state.source ? 'page' : 'false'
+      );
+    });      
+      
 
       gridEl.setAttribute('aria-busy', 'false');
       chipsEl.removeAttribute('aria-hidden');
@@ -335,8 +409,9 @@ function applyFilters(){
 			  decoding="async"
 			  width="640"
 			  height="360"
+              onerror="this.onerror=null;this.src='img/default-thumbnail.jpg';"
 			>
-			<span class="badge">${v.date ? new Date(v.date).toLocaleDateString() : ''}</span>
+			<span class="badge">${v.date ? new Date(v.date).toLocaleDateString('en-GB') : ''}</span>
 		  </a>
 		  <div class="body">
 			<div class="titleLine"><a href="${selfDetail}">${v.title}</a></div>
@@ -344,7 +419,7 @@ function applyFilters(){
 			<div class="topics">${(v.topics||[]).map(t=>`<span class="topic">${t}</span>`).join('')}</div>
 			<div class="actions">
 			  <a class="btn" href="${selfDetail}">Sources</a>
-			  <a class="btn" href="${v.url}" target="_blank" rel="noopener">Watch on YouTube</a>
+			  <a class="btn" href="${v.url}" target="_blank" rel="noopener">${watchLabel(v.url)}</a>
 			</div>
 		  </div>`;
 		gridEl.appendChild(card);
@@ -356,6 +431,9 @@ function applyFilters(){
 	  const params = new URLSearchParams();
 	  if(state.q) params.set('q', state.q);
 	  if(state.sort !== 'newest') params.set('sort', state.sort);
+      if(state.source !== 'all'){
+          params.set('source', state.source);
+        }
 	  if(state.topics.size) params.set('topics', [...state.topics].join(','));
 	  history.replaceState(null, '', params.toString() ? `?${params}` : location.pathname + location.hash);
 
@@ -520,13 +598,23 @@ function showDetail(id){
   const v = getVideoById(id);
   if(!v){ history.pushState(null,'',location.pathname); route(); return; }
   $('#dTitle').textContent = v.title || id;
-  $('#dDate').textContent = v.date ? new Date(v.date).toLocaleDateString() : '';
+  $('#dDate').textContent = v.date ? new Date(v.date).toLocaleDateString('en-GB') : '';
   $('#dTopics').textContent = (v.topics||[]).join(' · ');
-  $('#dThumb').src = v.thumb || (ytIdFromUrl(v.url) ? `https://img.youtube.com/vi/${ytIdFromUrl(v.url)}/hqdefault.jpg` : '');
-upgradeYouTubeThumb($('#dThumb'), v.url);
+    const detailThumb = $('#dThumb');
+
+    detailThumb.onerror = function(){
+      this.onerror = null;
+      this.src = 'img/default-thumbnail.jpg';
+    };
+
+    detailThumb.src = v.thumb || 'img/default-thumbnail.jpg';
+    upgradeYouTubeThumb(detailThumb, v.url);
+
+    detailThumb.alt = v.title || '';
   $('#dThumb').alt = v.title || '';
-  $('#dBadge').textContent = v.date ? new Date(v.date).toLocaleDateString() : '';
+  $('#dBadge').textContent = v.date ? new Date(v.date).toLocaleDateString('en-GB') : '';
   $('#dWatch').href = v.url || '#';
+  $('#dWatch').textContent = watchLabel(v.url);
   $('#dNotes').textContent = v.notes || '';
   renderRefs(v);
   renderRelated(v);
@@ -565,10 +653,15 @@ function wireStaticLinks(){
 
 function goArchive(){
   history.pushState(null, '', location.pathname + '#archive');
-  // Reset basic state; keep it simple for now
-  state = { q: '', topics: new Set(), sort: 'newest' };
-  controls.classList.remove('is-hidden');
 
+  state = {
+    q: '',
+    topics: new Set(),
+    sort: 'newest',
+    source: 'all'
+  };
+
+  controls.classList.remove('is-hidden');
 
   renderArchive();
   showSection('#archive');
@@ -596,13 +689,21 @@ function route(){
   if(vid){ showDetail(vid); return; }
 
   // Default: archive view (respect query params)
-  const topics = (p.get('topics')||'').split(',').filter(Boolean);
-  if(topics.length) state.topics = new Set(topics);
-  const sort = p.get('sort');
-  if(sort) state.sort = sort;
-  state.q = p.get('q') || '';
-  renderArchive();
-  showSection('#archive');
+    const topics = (p.get('topics') || '').split(',').filter(Boolean);
+    state.topics = new Set(topics);
+
+    const sort = p.get('sort');
+    state.sort = sort || 'newest';
+
+    const source = p.get('source');
+    state.source = ['youtube', 'patreon'].includes(source)
+      ? source
+      : 'all';
+
+    state.q = p.get('q') || '';
+
+    renderArchive();
+    showSection('#archive');
 }
 
 window.addEventListener('hashchange', route);
@@ -700,8 +801,21 @@ loadData()
 
 
 // Client-side Archive navigation to avoid sandbox navigation blocks
-const navArchive = document.getElementById('navArchive');
-if(navArchive){ navArchive.addEventListener('click', (e)=>{ e.preventDefault(); goArchive(); }); }
+$$('[data-source-filter]').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+
+    const source = link.dataset.sourceFilter;
+
+    history.pushState(null, '', location.pathname + '#archive');
+
+    state.source = source;
+    controls.classList.remove('is-hidden');
+
+    renderArchive();
+    showSection('#archive');
+  });
+});
 const backArchive = document.getElementById('backArchive');
 if(backArchive){ backArchive.addEventListener('click', (e)=>{ e.preventDefault(); goArchive(); }); }
 
