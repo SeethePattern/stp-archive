@@ -291,6 +291,7 @@ const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
 const chipsEl = $('#chips');
+const topicsToggle = $('#topicsToggle');
 const gridEl = $('#grid');
 const emptyEl = $('#empty');
 const qEl = $('#q');
@@ -393,6 +394,14 @@ function applyFilters(){
       );
 	  $$('.chip').forEach(ch => ch.classList.toggle('active', state.topics.has(ch.textContent)));
 
+        if(topicsToggle){
+          const selectedCount = state.topics.size;
+
+          topicsToggle.textContent = selectedCount
+            ? `Topics (${selectedCount})`
+            : 'Topics';
+        }
+
 	  const rows = applyFilters();
 	  gridEl.innerHTML = '';
 	  for(const v of rows){
@@ -443,6 +452,17 @@ function applyFilters(){
 
 qEl.addEventListener('input', e => { state.q = e.target.value; renderArchive(); });
 sortEl.addEventListener('change', e => { state.sort = e.target.value; renderArchive(); });
+
+if(topicsToggle){
+  topicsToggle.addEventListener('click', () => {
+    const isOpen = chipsEl.classList.toggle('topics-open');
+
+    topicsToggle.setAttribute(
+      'aria-expanded',
+      String(isOpen)
+    );
+  });
+}
 
 if (compactBtn){
   const applyCompact = () => {
