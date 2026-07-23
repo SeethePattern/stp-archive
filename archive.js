@@ -322,7 +322,7 @@ function renderSponsors(targetId){
   label.textContent = 'Supported by';
   el.appendChild(label);
   for(const s of live){
-    const a = document.createElement('a'); a.href = s.link; a.target = '_blank'; a.rel = 'noopener'; a.title = (s.disclosure? s.disclosure+': ':'') + s.brand;
+    const a = document.createElement('a'); a.href = s.link; a.target = '_blank'; a.rel = 'noopener'; a.title = (s.disclosure? s.disclosure+': ':'') + s.brand; a.dataset.track = 'sponsor_clicked'; a.dataset.sponsor = s.brand; a.dataset.location = targetId.replace('#sponsorbar-', '');
     const img = document.createElement('img'); img.alt = s.brand; img.src = s.logo; a.appendChild(img);
     el.appendChild(a);
   }
@@ -431,7 +431,16 @@ function applyFilters(){
 			<div class="topics">${(v.topics||[]).map(t=>`<span class="topic">${t}</span>`).join('')}</div>
 			<div class="actions">
 			  <a class="btn" href="${selfDetail}">Sources</a>
-			  <a class="btn" href="${v.url}" target="_blank" rel="noopener">${watchLabel(v.url)}</a>
+                <a
+                  class="btn"
+                  href="${v.url}"
+                  target="_blank"
+                  rel="noopener"
+                  data-track="video_clicked"
+                  data-platform="${v.source}"
+                  data-video-id="${v.id}"
+                  data-location="archive-card"
+                >${watchLabel(v.url)}</a>
 			</div>
 		  </div>`;
 		gridEl.appendChild(card);
@@ -526,7 +535,9 @@ function renderRelated(v){
     const card = document.createElement('a');
     card.className = 'related-card';
     card.href = `${pageForId(r.id)}?v=${encodeURIComponent(r.id)}`;
-
+    card.dataset.track = 'related_video_clicked';
+    card.dataset.fromVideoId = v.id;
+    card.dataset.toVideoId = r.id;
 card.innerHTML = `
   <div class="thumb">
     <img
@@ -585,6 +596,15 @@ function renderRefs(v){
           a.target = '_blank';
           a.rel = 'noopener';
           a.textContent = it.t || it.u;
+            a.dataset.track = 'reference_clicked';
+            a.dataset.videoId = v.id;
+            a.dataset.referenceType = key;
+
+            try {
+              a.dataset.referenceDomain = new URL(it.u).hostname.replace(/^www\./, '');
+            } catch {
+              a.dataset.referenceDomain = '';
+            }
           li.appendChild(a);
         } else {  // just plain text
           const span = document.createElement('span');
@@ -619,7 +639,18 @@ function renderRefs(v){
 
 function showDetail(id){
   const v = getVideoById(id);
-  if(!v){ history.pushState(null,'',location.pathname); route(); return; }
+
+  if(!v){
+    history.pushState(null,'',location.pathname);
+    route();
+    return;
+  }
+
+  trackEvent('references_opened', {
+    videoId: v.id,
+    platform: v.source
+  });
+  
   $('#dTitle').textContent = v.title || id;
   $('#dDate').textContent = v.date ? new Date(v.date).toLocaleDateString('en-GB') : '';
   $('#dTopics').textContent = (v.topics||[]).join(' · ');
@@ -638,6 +669,10 @@ function showDetail(id){
   $('#dBadge').textContent = v.date ? new Date(v.date).toLocaleDateString('en-GB') : '';
   $('#dWatch').href = v.url || '#';
   $('#dWatch').textContent = watchLabel(v.url);
+  $('#dWatch').dataset.track = 'video_clicked';
+    $('#dWatch').dataset.platform = v.source;
+    $('#dWatch').dataset.videoId = v.id;
+    $('#dWatch').dataset.location = 'reference-page';
   $('#dNotes').textContent = v.notes || '';
   renderRefs(v);
   renderRelated(v);
@@ -666,12 +701,36 @@ function showSection(id){
 }
 
 function wireStaticLinks(){
-  $('#lPatreon').href = SUPPORT_LINKS.patreon;
-  $('#lKofi').href = SUPPORT_LINKS.kofi;
-  $('#lPaypal').href = SUPPORT_LINKS.paypal;
-  $('#lMerch').href = SUPPORT_LINKS.merch;
+  const patreon = $('#lPatreon');
+  const kofi = $('#lKofi');
+  const paypal = $('#lPaypal');
+  const merch = $('#lMerch');
+
+  patreon.href = SUPPORT_LINKS.patreon;
+  kofi.href = SUPPORT_LINKS.kofi;
+  paypal.href = SUPPORT_LINKS.paypal;
+  merch.href = SUPPORT_LINKS.merch;
+
+  patreon.dataset.track = 'support_method_clicked';
+  patreon.dataset.method = 'patreon';
+
+  kofi.dataset.track = 'support_method_clicked';
+  kofi.dataset.method = 'kofi';
+
+  paypal.dataset.track = 'support_method_clicked';
+  paypal.dataset.method = 'paypal';
+
+  merch.dataset.track = 'support_method_clicked';
+  merch.dataset.method = 'merch';
+
   const e = CONTACT.email;
-  if(e){ const a = $('#bizEmail'); a.href = 'mailto:'+e; a.textContent = e; }
+
+  if(e){
+    const a = $('#bizEmail');
+    a.href = 'mailto:' + e;
+    a.textContent = e;
+    a.dataset.track = 'contact_email_clicked';
+  }
 }
 
 function goArchive(){
@@ -868,11 +927,16 @@ if(backArchive){ backArchive.addEventListener('click', (e)=>{ e.preventDefault()
 // Support nav
 const navSupport = document.querySelector('a[href="#support"]');
 if (navSupport) {
-  navSupport.addEventListener('click', (e) => {
-    e.preventDefault();
-    history.pushState(null, '', location.pathname + '#support');
-    route();
-  });
+    navSupport.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      trackEvent('support_opened', {
+        location: 'top-navigation'
+      });
+
+      history.pushState(null, '', location.pathname + '#support');
+      route();
+    });
 }
 
 // Contact nav
@@ -880,6 +944,11 @@ const navContact = document.querySelector('a[href="#contact"]');
 if (navContact) {
   navContact.addEventListener('click', (e) => {
     e.preventDefault();
+
+    trackEvent('contact_opened', {
+      location: 'top-navigation'
+    });
+
     history.pushState(null, '', location.pathname + '#contact');
     route();
   });
@@ -900,3 +969,38 @@ if (exportBtn) {
     setTimeout(()=>URL.revokeObjectURL(url),500);
   });
 }
+
+function trackEvent(eventName, properties = {}) {
+  fetch('/api/track', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'omit',
+    referrerPolicy: 'no-referrer',
+    cache: 'no-store',
+    keepalive: true,
+    body: JSON.stringify({
+      event: eventName,
+      properties
+    })
+  }).catch(() => {
+    /*
+     * Tracking must never interfere with normal website operation.
+     * A failed tracking request is therefore silently ignored.
+     */
+  });
+}
+
+document.addEventListener('click', event => {
+  const link = event.target.closest('[data-track]');
+
+  if (!link) return;
+
+  const {
+    track,
+    ...properties
+  } = link.dataset;
+
+  trackEvent(track, properties);
+});
