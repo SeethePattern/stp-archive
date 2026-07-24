@@ -971,6 +971,22 @@ if (exportBtn) {
 }
 
 function trackEvent(eventName, properties = {}) {
+  const body = JSON.stringify({
+    event: eventName,
+    properties
+  });
+
+  if (navigator.sendBeacon) {
+    const sent = navigator.sendBeacon(
+      '/api/track',
+      new Blob([body], {
+        type: 'application/json'
+      })
+    );
+
+    if (sent) return;
+  }
+
   fetch('/api/track', {
     method: 'POST',
     headers: {
@@ -980,16 +996,8 @@ function trackEvent(eventName, properties = {}) {
     referrerPolicy: 'no-referrer',
     cache: 'no-store',
     keepalive: true,
-    body: JSON.stringify({
-      event: eventName,
-      properties
-    })
-  }).catch(() => {
-    /*
-     * Tracking must never interfere with normal website operation.
-     * A failed tracking request is therefore silently ignored.
-     */
-  });
+    body
+  }).catch(() => {});
 }
 
 document.addEventListener('click', event => {
