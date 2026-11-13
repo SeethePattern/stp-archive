@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cosmology Framework | See the Pattern</title>
+<style>
+:root {
+  --bg:#f5f7fb; --panel:#ffffff; --text:#172033; --muted:#687386; --border:#dbe1ea;
+  --accent:#315caa; --accent-soft:#eaf1ff;
+  --dev-developed:#245fbd; --dev-qualitative:#5c86c8; --dev-proposed:#7b6cb7;
+  --sev-none:#6d7684; --sev-low:#b68a00; --sev-med:#cf6b17; --sev-high:#b4232b;
+}
+* { box-sizing:border-box; }
+body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
+button { font:inherit; }
+.shell { max-width:1180px; margin:0 auto; padding:24px; }
+header { display:flex; justify-content:space-between; gap:18px; align-items:flex-start; margin-bottom:20px; }
+h1 { margin:0; font-size:28px; }
+.subtitle { margin-top:5px; color:var(--muted); }
+.tabs { display:flex; gap:8px; flex-wrap:wrap; }
+.tab { border:1px solid var(--border); background:var(--panel); padding:9px 14px; border-radius:9px; cursor:pointer; }
+.tab.active { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); font-weight:650; }
+.grid { display:grid; grid-template-columns:270px minmax(0,1fr); gap:18px; }
+.sidebar,.card { background:var(--panel); border:1px solid var(--border); border-radius:12px; }
+.sidebar { padding:10px; align-self:start; }
+.side-title { color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; padding:7px 8px 10px; }
+.item { width:100%; border:1px solid transparent; background:transparent; text-align:left; padding:10px; border-radius:9px; cursor:pointer; color:var(--text); }
+.item:hover,.item.active { background:var(--accent-soft); border-color:#c7d8fa; }
+.item small { display:block; color:var(--muted); margin-top:3px; }
+.card { padding:18px; margin-bottom:12px; }
+.model-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+.model-title { font-size:22px; font-weight:750; }
+.meta { color:var(--muted); font-size:13px; margin-top:4px; }
+.badges { display:flex; gap:7px; flex-wrap:wrap; }
+.badge { display:inline-flex; align-items:center; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:750; letter-spacing:.02em; border:1px solid transparent; }
+.dev-DEVELOPED { background:#dceaff; color:#184f9d; border-color:#a9c8f6; }
+.dev-QUALITATIVE { background:#e9f0fb; color:#456b9f; border-color:#c7d6e9; }
+.dev-PROPOSED { background:#eeeafb; color:#594a91; border-color:#d2c8ef; }
+.dev-NOT_ADDRESSED { background:#111; color:#fff; border-color:#111; }
+.dev-blank { background:#f0f2f5; color:#6f7783; border-color:#d9dde4; }
+.sev-NONE { background:#eef0f3; color:#59616c; border-color:#d5d9df; }
+.sev-LOW { background:#fff4c7; color:#765b00; border-color:#ead276; }
+.sev-MEDIUM { background:#ffe4c5; color:#8b460a; border-color:#efb271; }
+.sev-HIGH { background:#ffd9dc; color:#8f1720; border-color:#e99aa1; }
+.sev-blank { background:#f5f6f8; color:#7a818c; border-color:#e0e3e8; }
+.response { border:1px solid var(--border); border-radius:11px; background:var(--panel); margin-bottom:10px; overflow:hidden; }
+.response summary { cursor:pointer; list-style:none; padding:13px 14px; }
+.response summary::-webkit-details-marker { display:none; }
+.summary-row { display:flex; align-items:center; gap:12px; }
+.num { width:30px; height:30px; display:grid; place-items:center; border-radius:50%; border:1px solid var(--border); color:var(--muted); font-size:12px; flex:0 0 auto; }
+.summary-main { flex:1; min-width:0; }
+.summary-title { font-weight:700; }
+.response-body { border-top:1px solid var(--border); padding:15px; }
+.section-label { color:var(--muted); font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; margin:15px 0 6px; }
+.section-label:first-child { margin-top:0; }
+.text { line-height:1.55; font-size:14px; white-space:pre-wrap; }
+.mechanism { border:1px solid var(--border); border-radius:9px; padding:10px; margin:7px 0; }
+.mechanism-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+.family { color:var(--muted); font-size:12px; margin-top:2px; }
+.compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.empty { color:var(--muted); font-style:italic; }
+.hidden { display:none !important; }
+@media (max-width:760px) {
+  .shell { padding:14px; } header { display:block; } .tabs { margin-top:14px; }
+  .grid { grid-template-columns:1fr; } .compare { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<header>
+  <div>
+    <h1>Cosmology Framework | See the Pattern</h1>
+    <div class="subtitle">Early framework prototype. Currently populated with ΛCDM and Milne Cosmology.</div>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-view="models">Models</button>
+    <button class="tab" data-view="constraints">Constraints</button>
+    <button class="tab" data-view="mechanisms">Mechanisms</button>
+  </nav>
+</header>
+<main>
+  <section id="view-models" class="view"></section>
+  <section id="view-constraints" class="view hidden"></section>
+  <section id="view-mechanisms" class="view hidden"></section>
+</main>
+</div>
+<script>
+const DB = {"models": [{"model_id": "1", "name": "Lamda-CDM", "short_name": "ΛCDM", "description": null, "model_status": "Active", "gradient": {"gradient_assessment_id": "5", "model_id": "1", "gradient_strategy": "FORMATIVE", "temporal_architecture": "FINITE", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "HIGH", "assessment_summary": null, "assessment_rationale": null, "notes": "test 3", "date_updated": "2026-10-15 15:22:12.337289+00"}, "responses": [{"response_id": "5", "constraint_id": "1", "constraint_name": "Cosmological redshift", "display_order": "1", "core_explanation": "Cosmological expansion stretches photon wavelengths while preserving spectral fingerprints.", "development_status": "DEVELOPED", "development_rationale": "Cosmological redshift is quantitatively specified within the FLRW framework and is routinely incorporated into cosmological distance, expansion-history and structure calculations.", "overall_severity": "NONE", "assessment_summary": "Provides a quantitatively developed account of the observed cosmological redshift relation.", "assessment_rationale": "The mechanism is mathematically specified and integrated consistently into the wider ΛCDM framework; no major unresolved issue is identified here at the level of explaining the existence of cosmological redshift itself.", "notes": null, "mechanisms": [{"mechanism_id": "3", "mechanism_name": "FLRW cosmological redshift", "mechanism_description": null, "family_name": "Expanding Spacetime", "role": "Primary", "response_description": "Provides the primary mechanism for cosmological redshift: photon wavelengths scale with the FLRW scale factor between emission and observation. Peculiar-velocity and gravitational contributions are treated separately."}]}, {"response_id": "6", "constraint_id": "2", "constraint_name": "Distance ladder", "display_order": "2", "core_explanation": "Geometric and calibrated standard-candle methods provide distances independently of redshift; expansion links them to the Hubble relation.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "HIGH", "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "4", "mechanism_name": "Local distance-ladder calibration", "mechanism_description": "Distances are calibrated sequentially from geometric anchors such as parallax to standardisable stellar indicators including Cepheids and/or TRGB, and then to Type Ia supernovae at larger distances.", "family_name": "Distance Calibration", "role": "Primary", "response_description": null}, {"mechanism_id": "3", "mechanism_name": "FLRW cosmological redshift", "mechanism_description": null, "family_name": "Expanding Spacetime", "role": "Supporting", "response_description": null}]}, {"response_id": "10", "constraint_id": "3", "constraint_name": "Light-element abundances", "display_order": "3", "core_explanation": "Big Bang nucleosynthesis produces a primordial mixture dominated by H and He, with predicted deuterium and lithium abundances.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "MEDIUM", "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "7", "mechanism_name": "Big Bang Nucleosynthesis", "mechanism_description": "Occurred within the first few minutes after the Big Bang. It formed the lightest elements: primarily hydrogen, helium (helium-4 and helium-3), deuterium, and trace amounts of lithium.", "family_name": "Nucleosynthesis", "role": "Primary", "response_description": null}, {"mechanism_id": "3", "mechanism_name": "FLRW cosmological redshift", "mechanism_description": null, "family_name": "Expanding Spacetime", "role": "Supporting", "response_description": null}, {"mechanism_id": "10", "mechanism_name": "Hot dense early-universe plasma", "mechanism_description": null, "family_name": "Thermal history", "role": "Enabling", "response_description": null}]}, {"response_id": "17", "constraint_id": "4", "constraint_name": "Cosmic microwave background", "display_order": "4", "core_explanation": "Matter and radiation begin in a hot, dense, optically thick state in which repeated interactions maintain a thermal radiation field. As the universe expands and cools, recombination reduces the free-electron density, photons decouple, and the thermal spectrum subsequently redshifts while retaining its blackbody form.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "MEDIUM", "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "10", "mechanism_name": "Hot dense early-universe plasma", "mechanism_description": null, "family_name": "Thermal history", "role": "Enabling", "response_description": null}, {"mechanism_id": "3", "mechanism_name": "FLRW cosmological redshift", "mechanism_description": null, "family_name": "Expanding Spacetime", "role": "Supporting", "response_description": null}]}, {"response_id": "1", "constraint_id": "5", "constraint_name": "Cosmic Dipoles", "display_order": "5", "core_explanation": "Cosmic dipoles arise primarily from the observer's motion relative to the cosmological rest frame. This produces a temperature dipole in the CMB through the relativistic Doppler effect, and directional variations in galaxy and quasar populations through Doppler boosting and relativistic aberration. The model predicts broadly aligned kinematic dipoles, with amplitudes dependent on the observed populations and additional contributions from large-scale structure.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "MEDIUM", "assessment_summary": "some radio-galaxy and quasar surveys report amplitudes exceeding the standard kinematic predictions. However, the observational picture remains contested, with recent analyses finding greater consistency with CMB-derived motion.", "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "12", "mechanism_name": "Doppler dipole from motion relative to the CMB rest frame", "mechanism_description": "Relative motion between an observer and a radiation field produces direction-dependent Doppler shifts, creating a dipolar anisotropy in the observed frequency or temperature.", "family_name": "Kinematic Effects", "role": "Primary", "response_description": "Applied to the observer's motion relative to the CMB rest frame, producing the observed temperature dipole."}]}, {"response_id": "18", "constraint_id": "6", "constraint_name": "CMB anisotropies / power spectrum", "display_order": "6", "core_explanation": "Acoustic oscillations in the pre-recombination photon–baryon plasma evolve from primordial density perturbations; ΛCDM reproduces the peak structure quantitatively.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "MEDIUM", "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "13", "mechanism_name": "Inflationary generation of primordial perturbations", "mechanism_description": "Quantum fluctuations generated during inflation are stretched to cosmological scales, producing an approximately adiabatic primordial perturbation spectrum.", "family_name": "Inflation", "role": "Seeding", "response_description": "Supplies the initial perturbation spectrum that drives the subsequent photon-baryon acoustic oscillations represented in the CMB power spectrum."}]}, {"response_id": "19", "constraint_id": "7", "constraint_name": "CMB temperature with redshift", "display_order": "7", "core_explanation": "Expansion predicts T(z)=T₀(1+z), broadly matching SZ-cluster and absorption-system inferences.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "LOW", "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "3", "mechanism_name": "FLRW cosmological redshift", "mechanism_description": null, "family_name": "Expanding Spacetime", "role": "Primary", "response_description": null}, {"mechanism_id": "10", "mechanism_name": "Hot dense early-universe plasma", "mechanism_description": null, "family_name": "Thermal history", "role": "Enabling", "response_description": null}]}, {"response_id": "20", "constraint_id": "8", "constraint_name": "Large-scale structure", "display_order": "8", "core_explanation": "Primordial density perturbations grow gravitationally inside a cold-dark-matter framework to form the cosmic web.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "HIGH", "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "14", "mechanism_name": "Cold dark matter structure growth", "mechanism_description": "Cold, effectively collisionless dark matter responds gravitationally to primordial density perturbations and forms the dominant underlying matter distribution on which baryonic structure subsequently develops.", "family_name": "Dark Matter Dynamics", "role": "Primary", "response_description": "Provides the dominant non-baryonic matter component whose early growth establishes the potential wells and filamentary structure traced by later baryonic matter."}, {"mechanism_id": "13", "mechanism_name": "Inflationary generation of primordial perturbations", "mechanism_description": "Quantum fluctuations generated during inflation are stretched to cosmological scales, producing an approximately adiabatic primordial perturbation spectrum.", "family_name": "Inflation", "role": "Seeding", "response_description": null}, {"mechanism_id": "3", "mechanism_name": "FLRW cosmological redshift", "mechanism_description": null, "family_name": "Expanding Spacetime", "role": "Supporting", "response_description": null}]}, {"response_id": "21", "constraint_id": "9", "constraint_name": "Galaxy formation and evolution", "display_order": "9", "core_explanation": "Hierarchical halo growth, gas cooling, star formation, mergers, feedback and enrichment create evolving galaxy populations.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "MEDIUM", "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "15", "mechanism_name": "Baryonic cooling and star formation", "mechanism_description": null, "family_name": "Galaxy formation and evolution", "role": "Primary", "response_description": "Gas falls into gravitational potentials, cools, condenses and forms stars, producing the luminous galaxy component."}, {"mechanism_id": "16", "mechanism_name": "Hierarchical assembly and mergers", "mechanism_description": null, "family_name": "Galaxy formation and evolution", "role": "Primary", "response_description": "Galaxies subsequently grow and transform through mergers, accretion and interactions."}, {"mechanism_id": "14", "mechanism_name": "Cold dark matter structure growth", "mechanism_description": "Cold, effectively collisionless dark matter responds gravitationally to primordial density perturbations and forms the dominant underlying matter distribution on which baryonic structure subsequently develops.", "family_name": "Dark Matter Dynamics", "role": "Supporting", "response_description": "Provides the halo population and gravitational potential wells in which baryonic galaxies develop."}]}, {"response_id": "22", "constraint_id": "10", "constraint_name": "Time-domain behaviour", "display_order": "10", "core_explanation": "Cosmological expansion stretches observed timescales by the same (1+z) factor as wavelengths.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "LOW", "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "3", "mechanism_name": "FLRW cosmological redshift", "mechanism_description": null, "family_name": "Expanding Spacetime", "role": "Primary", "response_description": "Cosmological expansion stretches observed time intervals by the same (1+z) factor as wavelengths, predicting the corresponding time dilation in transient and variable-source light curves."}]}]}, {"model_id": "4", "name": "Milne Cosmology", "short_name": "MILNE", "description": "A homogeneous and isotropic cosmological model developed by Edward Arthur Milne in the 1930s, based on special relativity. It describes cosmic redshift as a consequence of the relative motion of galaxies through flat spacetime, rather than the expansion of space itself. The model is mathematically equivalent to an empty FLRW universe with negative spatial curvature and linear expansion.", "model_status": "Historical", "gradient": {"gradient_assessment_id": "8", "model_id": "4", "gradient_strategy": "FORMATIVE", "temporal_architecture": null, "development_status": null, "development_rationale": null, "overall_severity": null, "assessment_summary": "The finite beginning describes the expanding cosmological configuration, not necessarily the creation of spacetime or an initial physical gradient.", "assessment_rationale": null, "notes": null, "date_updated": "2026-11-04 09:28:05.449644+00"}, "responses": [{"response_id": "23", "constraint_id": "1", "constraint_name": "Cosmological redshift", "display_order": "1", "core_explanation": "Milne cosmology explains cosmological redshift through the special-relativistic Doppler effect, arising from the relative recessional motion of galaxies following inertial trajectories through flat spacetime. The mechanism provides a mathematically defined relationship between recession velocity and observed redshift, accommodating arbitrarily large redshifts without superluminal velocities.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "NONE", "assessment_summary": "Milne provides a mathematically developed explanation for cosmological redshift through special-relativistic kinematics. The mechanism accounts for the observed wavelength shifts without requiring superluminal recession velocities, and no significant observational conflict has been identified within the scope of this constraint. Quantitative tests of the model's distance–redshift relationship are assessed separately under the Distance Ladder constraint.", "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "17", "mechanism_name": "Cosmological Kinematic Redshift", "mechanism_description": "Cosmological redshift arises from the relative recessional motion of emitters and observers, governed by the relativistic Doppler effect. In Milne cosmology, galaxies follow inertial trajectories through flat spacetime, with their relative velocities producing the observed wavelength shifts without requiring the expansion of space itself.", "family_name": "Kinematic Effects", "role": "Primary", "response_description": null}]}, {"response_id": "25", "constraint_id": "2", "constraint_name": "Distance ladder", "display_order": "2", "core_explanation": "Milne cosmology provides a mathematically defined distance–redshift relationship derived from its kinematic expansion and spacetime geometry. It is compatible with the local distance ladder and reproduces the approximately linear Hubble relationship at low redshift.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "HIGH", "assessment_summary": "At greater distances, the model predicts a specific luminosity–distance relationship that can be tested against standardised Type Ia supernovae. Modern supernova compilations favour a different relationship, placing Milne under significant quantitative pressure. However, uncertainties in supernova standardisation, including possible progenitor-age effects, remain relevant to the interpretation of these discrepancies.", "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "17", "mechanism_name": "Cosmological Kinematic Redshift", "mechanism_description": "Cosmological redshift arises from the relative recessional motion of emitters and observers, governed by the relativistic Doppler effect. In Milne cosmology, galaxies follow inertial trajectories through flat spacetime, with their relative velocities producing the observed wavelength shifts without requiring the expansion of space itself.", "family_name": "Kinematic Effects", "role": "Primary", "response_description": null}, {"mechanism_id": "4", "mechanism_name": "Local distance-ladder calibration", "mechanism_description": "Distances are calibrated sequentially from geometric anchors such as parallax to standardisable stellar indicators including Cepheids and/or TRGB, and then to Type Ia supernovae at larger distances.", "family_name": "Distance Calibration", "role": "Primary", "response_description": null}]}, {"response_id": "26", "constraint_id": "3", "constraint_name": "Light-element abundances", "display_order": "3", "core_explanation": null, "development_status": "NOT_ADDRESSED", "development_rationale": "Milne cosmology does not provide an established mechanism for producing the observed primordial abundances of helium, deuterium and lithium. Its original formulation describes a kinematically expanding distribution of galaxies in flat spacetime, without a physical model of the hot, dense conditions and nuclear processes required for primordial nucleosynthesis.", "overall_severity": null, "assessment_summary": null, "assessment_rationale": null, "notes": "Related linearly coasting cosmologies have explored alternative nucleosynthesis mechanisms, including scenarios capable of producing significant primordial helium. However, reproducing the observed deuterium abundance remains particularly challenging, and these extensions introduce additional physical assumptions beyond Milne's original model.", "mechanisms": []}, {"response_id": "27", "constraint_id": "4", "constraint_name": "Cosmic microwave background", "display_order": "4", "core_explanation": null, "development_status": "NOT_ADDRESSED", "development_rationale": "Milne cosmology does not provide an established explanation for the origin of the cosmic microwave background or its observed near-perfect blackbody spectrum.  Although its kinematic framework can describe the propagation and redshifting of an existing thermal radiation field, it does not specify the physical conditions or thermalisation processes responsible for generating that radiation. Explaining the observed spectrum therefore requires additional assumptions or mechanisms beyond the original model.", "overall_severity": null, "assessment_summary": null, "assessment_rationale": null, "notes": null, "mechanisms": []}, {"response_id": "28", "constraint_id": "5", "constraint_name": "Cosmic Dipoles", "display_order": "5", "core_explanation": "Milne cosmology provides a kinematic explanation for cosmic dipoles through the observer's motion relative to an isotropic cosmological distribution. Special-relativistic Doppler effects and aberration can account for directional anisotropies in radiation and the observed number counts of galaxies and quasars.", "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "MEDIUM", "assessment_summary": "The mechanism predicts broadly aligned kinematic dipoles, although their amplitudes depend on the properties of the observed source populations. However, reported radio-galaxy and quasar dipole amplitudes exceed conventional kinematic expectations, creating an unresolved observational tension.  Milne also does not independently explain the origin of the CMB radiation field, making its explanation of the CMB dipole conditional on the existence of that background.", "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "12", "mechanism_name": "Doppler dipole from motion relative to the CMB rest frame", "mechanism_description": "Relative motion between an observer and a radiation field produces direction-dependent Doppler shifts, creating a dipolar anisotropy in the observed frequency or temperature.", "family_name": "Kinematic Effects", "role": "Primary", "response_description": null}]}, {"response_id": "29", "constraint_id": "6", "constraint_name": "CMB anisotropies / power spectrum", "display_order": "6", "core_explanation": null, "development_status": "NOT_ADDRESSED", "development_rationale": null, "overall_severity": null, "assessment_summary": "Milne cosmology does not provide an established explanation for the observed CMB temperature anisotropies or their angular power spectrum, including the characteristic acoustic peaks.  The original model lacks a physical account of the early radiation and matter interactions, density perturbations and acoustic processes needed to generate these structures. Although its spacetime geometry provides a basis for calculating angular distances, it does not independently predict the observed power spectrum.  Alternative cosmologies employing linear expansion have explored mechanisms for generating CMB anisotropies, but these introduce additional physics beyond Milne's original formulation.", "assessment_rationale": null, "notes": null, "mechanisms": []}, {"response_id": "30", "constraint_id": "7", "constraint_name": "CMB temperature with redshift", "display_order": "7", "core_explanation": null, "development_status": "PROPOSED", "development_rationale": null, "overall_severity": "MEDIUM", "assessment_summary": "Milne cosmology's kinematic redshift mechanism can reproduce the observed CMB temperature–redshift relationship, T(z) = T₀(1 + z), provided an initially thermal radiation field is assumed.  The relativistic redshifting of freely propagating photons allows a blackbody spectrum to retain its thermal form while its effective temperature decreases with cosmic time. This produces a relationship consistent with observations.", "assessment_rationale": "However, Milne's original cosmology does not establish the origin or physical evolution of the CMB radiation field. The temperature–redshift relationship is therefore a conditional consequence of the model's kinematics rather than a fully developed cosmological explanation.", "notes": null, "mechanisms": [{"mechanism_id": "17", "mechanism_name": "Cosmological Kinematic Redshift", "mechanism_description": "Cosmological redshift arises from the relative recessional motion of emitters and observers, governed by the relativistic Doppler effect. In Milne cosmology, galaxies follow inertial trajectories through flat spacetime, with their relative velocities producing the observed wavelength shifts without requiring the expansion of space itself.", "family_name": "Kinematic Effects", "role": "Primary", "response_description": null}]}, {"response_id": "31", "constraint_id": "8", "constraint_name": "Large-scale structure", "display_order": "8", "core_explanation": null, "development_status": "NOT_ADDRESSED", "development_rationale": null, "overall_severity": null, "assessment_summary": "Milne cosmology describes a homogeneous and isotropic distribution of freely receding galaxies but does not provide an established mechanism for the formation and evolution of large-scale structure, including galaxy clusters, filaments and voids.  In its original formulation, galaxies follow inertial trajectories without significant mutual gravitational interactions. Consequently, the model does not explain how initial density fluctuations develop into the observed cosmic web or reproduce the measured matter power spectrum and baryon acoustic oscillation features.  Additional physical mechanisms would be required to account for these observations.", "assessment_rationale": null, "notes": null, "mechanisms": []}, {"response_id": "32", "constraint_id": "9", "constraint_name": "Galaxy formation and evolution", "display_order": "9", "core_explanation": null, "development_status": "NOT_ADDRESSED", "development_rationale": null, "overall_severity": null, "assessment_summary": "Milne cosmology describes the kinematic distribution and recession of galaxies but does not provide an established explanation for their formation or subsequent evolution.  In the idealised model, galaxies are treated as pre-existing objects following inertial trajectories. No mechanisms are specified for the initial formation of galaxies, their internal structure, morphological diversity, or their evolution through interactions and mergers.  These processes would require additional physical mechanisms beyond the original kinematic cosmological description.", "assessment_rationale": null, "notes": null, "mechanisms": []}, {"response_id": "33", "constraint_id": "10", "constraint_name": "Time-domain behaviour", "display_order": "10", "core_explanation": null, "development_status": "DEVELOPED", "development_rationale": null, "overall_severity": "NONE", "assessment_summary": "Milne cosmology predicts the observed cosmological time dilation of distant transient events through the special-relativistic Doppler effect. The relative recessional motion of sources produces a stretching of observed time intervals by a factor of (1 + z), consistent with the measured duration of Type Ia supernova light curves.  This prediction follows directly from the same kinematic mechanism responsible for cosmological redshift and does not require expanding space. Observed supernova time dilation therefore provides a successful test of Milne's kinematic interpretation, although it cannot independently distinguish between kinematic and expanding-space explanations.", "assessment_rationale": null, "notes": null, "mechanisms": [{"mechanism_id": "17", "mechanism_name": "Cosmological Kinematic Redshift", "mechanism_description": "Cosmological redshift arises from the relative recessional motion of emitters and observers, governed by the relativistic Doppler effect. In Milne cosmology, galaxies follow inertial trajectories through flat spacetime, with their relative velocities producing the observed wavelength shifts without requiring the expansion of space itself.", "family_name": "Kinematic Effects", "role": "Primary", "response_description": null}]}]}], "constraints": [{"constraint_id": "1", "name": "Cosmological redshift", "display_order": "1"}, {"constraint_id": "2", "name": "Distance ladder", "display_order": "2"}, {"constraint_id": "3", "name": "Light-element abundances", "display_order": "3"}, {"constraint_id": "4", "name": "Cosmic microwave background", "display_order": "4"}, {"constraint_id": "5", "name": "Cosmic Dipoles", "display_order": "5"}, {"constraint_id": "6", "name": "CMB anisotropies / power spectrum", "display_order": "6"}, {"constraint_id": "7", "name": "CMB temperature with redshift", "display_order": "7"}, {"constraint_id": "8", "name": "Large-scale structure", "display_order": "8"}, {"constraint_id": "9", "name": "Galaxy formation and evolution", "display_order": "9"}, {"constraint_id": "10", "name": "Time-domain behaviour", "display_order": "10"}], "mechanisms": [{"mechanism_id": "14", "name": "Cold dark matter structure growth", "family": "Dark Matter Dynamics", "description": "Cold, effectively collisionless dark matter responds gravitationally to primordial density perturbations and forms the dominant underlying matter distribution on which baryonic structure subsequently develops.", "uses": [{"model": "ΛCDM", "constraint": "Large-scale structure", "role": "Primary", "description": "Provides the dominant non-baryonic matter component whose early growth establishes the potential wells and filamentary structure traced by later baryonic matter."}, {"model": "ΛCDM", "constraint": "Galaxy formation and evolution", "role": "Supporting", "description": "Provides the halo population and gravitational potential wells in which baryonic galaxies develop."}]}, {"mechanism_id": "4", "name": "Local distance-ladder calibration", "family": "Distance Calibration", "description": "Distances are calibrated sequentially from geometric anchors such as parallax to standardisable stellar indicators including Cepheids and/or TRGB, and then to Type Ia supernovae at larger distances.", "uses": [{"model": "ΛCDM", "constraint": "Distance ladder", "role": "Primary", "description": null}, {"model": "MILNE", "constraint": "Distance ladder", "role": "Primary", "description": null}]}, {"mechanism_id": "3", "name": "FLRW cosmological redshift", "family": "Expanding Spacetime", "description": null, "uses": [{"model": "ΛCDM", "constraint": "Cosmological redshift", "role": "Primary", "description": "Provides the primary mechanism for cosmological redshift: photon wavelengths scale with the FLRW scale factor between emission and observation. Peculiar-velocity and gravitational contributions are treated separately."}, {"model": "ΛCDM", "constraint": "Distance ladder", "role": "Supporting", "description": null}, {"model": "ΛCDM", "constraint": "Light-element abundances", "role": "Supporting", "description": null}, {"model": "ΛCDM", "constraint": "Cosmic microwave background", "role": "Supporting", "description": null}, {"model": "ΛCDM", "constraint": "CMB temperature with redshift", "role": "Primary", "description": null}, {"model": "ΛCDM", "constraint": "Large-scale structure", "role": "Supporting", "description": null}, {"model": "ΛCDM", "constraint": "Time-domain behaviour", "role": "Primary", "description": "Cosmological expansion stretches observed time intervals by the same (1+z) factor as wavelengths, predicting the corresponding time dilation in transient and variable-source light curves."}]}, {"mechanism_id": "15", "name": "Baryonic cooling and star formation", "family": "Galaxy formation and evolution", "description": null, "uses": [{"model": "ΛCDM", "constraint": "Galaxy formation and evolution", "role": "Primary", "description": "Gas falls into gravitational potentials, cools, condenses and forms stars, producing the luminous galaxy component."}]}, {"mechanism_id": "16", "name": "Hierarchical assembly and mergers", "family": "Galaxy formation and evolution", "description": null, "uses": [{"model": "ΛCDM", "constraint": "Galaxy formation and evolution", "role": "Primary", "description": "Galaxies subsequently grow and transform through mergers, accretion and interactions."}]}, {"mechanism_id": "13", "name": "Inflationary generation of primordial perturbations", "family": "Inflation", "description": "Quantum fluctuations generated during inflation are stretched to cosmological scales, producing an approximately adiabatic primordial perturbation spectrum.", "uses": [{"model": "ΛCDM", "constraint": "CMB anisotropies / power spectrum", "role": "Seeding", "description": "Supplies the initial perturbation spectrum that drives the subsequent photon-baryon acoustic oscillations represented in the CMB power spectrum."}, {"model": "ΛCDM", "constraint": "Large-scale structure", "role": "Seeding", "description": null}]}, {"mechanism_id": "17", "name": "Cosmological Kinematic Redshift", "family": "Kinematic Effects", "description": "Cosmological redshift arises from the relative recessional motion of emitters and observers, governed by the relativistic Doppler effect. In Milne cosmology, galaxies follow inertial trajectories through flat spacetime, with their relative velocities producing the observed wavelength shifts without requiring the expansion of space itself.", "uses": [{"model": "MILNE", "constraint": "Cosmological redshift", "role": "Primary", "description": null}, {"model": "MILNE", "constraint": "Distance ladder", "role": "Primary", "description": null}, {"model": "MILNE", "constraint": "CMB temperature with redshift", "role": "Primary", "description": null}, {"model": "MILNE", "constraint": "Time-domain behaviour", "role": "Primary", "description": null}]}, {"mechanism_id": "12", "name": "Doppler dipole from motion relative to the CMB rest frame", "family": "Kinematic Effects", "description": "Relative motion between an observer and a radiation field produces direction-dependent Doppler shifts, creating a dipolar anisotropy in the observed frequency or temperature.", "uses": [{"model": "ΛCDM", "constraint": "Cosmic Dipoles", "role": "Primary", "description": "Applied to the observer's motion relative to the CMB rest frame, producing the observed temperature dipole."}, {"model": "MILNE", "constraint": "Cosmic Dipoles", "role": "Primary", "description": null}]}, {"mechanism_id": "7", "name": "Big Bang Nucleosynthesis", "family": "Nucleosynthesis", "description": "Occurred within the first few minutes after the Big Bang. It formed the lightest elements: primarily hydrogen, helium (helium-4 and helium-3), deuterium, and trace amounts of lithium.", "uses": [{"model": "ΛCDM", "constraint": "Light-element abundances", "role": "Primary", "description": null}]}, {"mechanism_id": "10", "name": "Hot dense early-universe plasma", "family": "Thermal history", "description": null, "uses": [{"model": "ΛCDM", "constraint": "Light-element abundances", "role": "Enabling", "description": null}, {"model": "ΛCDM", "constraint": "Cosmic microwave background", "role": "Enabling", "description": null}, {"model": "ΛCDM", "constraint": "CMB temperature with redshift", "role": "Enabling", "description": null}]}]};
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const devBadge = v => `<span class="badge dev-${v || 'blank'}">${esc(v ? v.replaceAll('_',' ') : 'NOT ASSESSED')}</span>`;
+const sevBadge = v => `<span class="badge sev-${v || 'blank'}">${esc(v || 'NOT ASSESSED')}</span>`;
+const val = (label, text) => text ? `<div class="section-label">${esc(label)}</div><div class="text">${esc(text)}</div>` : '';
+
+let selectedModel = DB.models[0].model_id;
+let selectedConstraint = DB.constraints[0].constraint_id;
+let selectedMechanism = DB.mechanisms[0]?.mechanism_id;
+
+function modelLabel(m) { return m.short_name || m.name; }
+
+function renderMechanismList(items) {
+  if (!items?.length) return `<div class="empty">No mechanism linked.</div>`;
+  return items.map(x => `
+    <div class="mechanism">
+      <div class="mechanism-top">
+        <strong>${esc(x.mechanism_name)}</strong>
+        <span class="badge dev-QUALITATIVE">${esc(x.role || 'Role not set')}</span>
+      </div>
+      <div class="family">${esc(x.family_name || '')}</div>
+      ${x.response_description ? `<div class="text" style="margin-top:7px">${esc(x.response_description)}</div>` : ''}
+    </div>`).join('');
+}
+
+function responseCard(r) {
+  return `<details class="response">
+    <summary>
+      <div class="summary-row">
+        <span class="num">${esc(r.display_order)}</span>
+        <div class="summary-main">
+          <div class="summary-title">${esc(r.constraint_name)}</div>
+          <div class="badges" style="margin-top:6px">${devBadge(r.development_status)}${sevBadge(r.overall_severity)}</div>
+        </div>
+      </div>
+    </summary>
+    <div class="response-body">
+      ${val('Core explanation', r.core_explanation)}
+      ${val('Development rationale', r.development_rationale)}
+      ${r.mechanisms?.length ? `<div class="section-label">Mechanisms</div>${renderMechanismList(r.mechanisms)}` : ''}
+      ${val('Assessment summary', r.assessment_summary)}
+      ${val('Assessment rationale', r.assessment_rationale)}
+      ${val('Notes', r.notes)}
+    </div>
+  </details>`;
+}
+
+function renderModels() {
+  const root = document.getElementById('view-models');
+  const current = DB.models.find(m => m.model_id === selectedModel) || DB.models[0];
+  root.innerHTML = `<div class="grid">
+    <aside class="sidebar">
+      <div class="side-title">Models</div>
+      ${DB.models.map(m => `<button class="item ${m.model_id===current.model_id?'active':''}" data-model="${m.model_id}">
+        <strong>${esc(modelLabel(m))}</strong><small>${esc(m.model_status || '')}</small></button>`).join('')}
+    </aside>
+    <div>
+      <div class="card">
+        <div class="model-head">
+          <div><div class="model-title">${esc(modelLabel(current))}</div><div class="meta">${esc(current.name)} · ${esc(current.model_status || '')}</div></div>
+          <div class="badges">
+            ${current.gradient?.gradient_strategy ? `<span class="badge dev-QUALITATIVE">${esc(current.gradient.gradient_strategy)}</span>` : ''}
+            ${current.gradient?.overall_severity ? sevBadge(current.gradient.overall_severity) : ''}
+          </div>
+        </div>
+        ${current.description ? `<div class="text" style="margin-top:12px">${esc(current.description)}</div>` : ''}
+        ${current.gradient?.assessment_summary ? val('Gradient assessment', current.gradient.assessment_summary) : ''}
+      </div>
+      ${current.responses.map(responseCard).join('')}
+    </div>
+  </div>`;
+  root.querySelectorAll('[data-model]').forEach(b => b.addEventListener('click', () => {
+    selectedModel = b.dataset.model; renderModels();
+  }));
+}
+
+function renderConstraints() {
+  const root = document.getElementById('view-constraints');
+  const c = DB.constraints.find(x => x.constraint_id === selectedConstraint) || DB.constraints[0];
+  root.innerHTML = `<div class="grid">
+    <aside class="sidebar">
+      <div class="side-title">Constraints</div>
+      ${DB.constraints.map(x => `<button class="item ${x.constraint_id===c.constraint_id?'active':''}" data-constraint="${x.constraint_id}">
+        <strong>${esc(x.display_order)}. ${esc(x.name)}</strong></button>`).join('')}
+    </aside>
+    <div>
+      <div class="card"><div class="model-title">${esc(c.display_order)}. ${esc(c.name)}</div><div class="meta">Same observation, different model responses.</div></div>
+      <div class="compare">
+        ${DB.models.map(m => {
+          const r = m.responses.find(r => r.constraint_id === c.constraint_id);
+          return `<div class="card">
+            <div class="model-head"><div class="model-title" style="font-size:18px">${esc(modelLabel(m))}</div>
+            <div class="badges">${devBadge(r?.development_status)}${sevBadge(r?.overall_severity)}</div></div>
+            ${r ? val('Core explanation', r.core_explanation) + val('Development rationale',r.development_rationale) +
+              (r.mechanisms?.length ? `<div class="section-label">Mechanisms</div>${renderMechanismList(r.mechanisms)}` : '') +
+              val('Assessment summary',r.assessment_summary) + val('Assessment rationale',r.assessment_rationale) + val('Notes',r.notes)
+              : '<div class="empty" style="margin-top:12px">No response record.</div>'}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>`;
+  root.querySelectorAll('[data-constraint]').forEach(b => b.addEventListener('click', () => {
+    selectedConstraint = b.dataset.constraint; renderConstraints();
+  }));
+}
+
+function renderMechanisms() {
+  const root = document.getElementById('view-mechanisms');
+  const mech = DB.mechanisms.find(x => x.mechanism_id === selectedMechanism) || DB.mechanisms[0];
+  if (!mech) { root.innerHTML = '<div class="card">No linked mechanisms.</div>'; return; }
+  root.innerHTML = `<div class="grid">
+    <aside class="sidebar">
+      <div class="side-title">Mechanisms in use</div>
+      ${DB.mechanisms.map(x => `<button class="item ${x.mechanism_id===mech.mechanism_id?'active':''}" data-mechanism="${x.mechanism_id}">
+        <strong>${esc(x.name)}</strong><small>${esc(x.family)} · ${x.uses.length} use${x.uses.length===1?'':'s'}</small></button>`).join('')}
+    </aside>
+    <div>
+      <div class="card">
+        <div class="meta">${esc(mech.family)}</div>
+        <div class="model-title">${esc(mech.name)}</div>
+        ${mech.description ? `<div class="text" style="margin-top:10px">${esc(mech.description)}</div>` : ''}
+      </div>
+      <div class="card">
+        <div class="side-title" style="padding-left:0">Used by responses</div>
+        ${mech.uses.map(u => `<div class="mechanism">
+          <div class="mechanism-top"><strong>${esc(u.model)} → ${esc(u.constraint)}</strong><span class="badge dev-QUALITATIVE">${esc(u.role || '')}</span></div>
+          ${u.description ? `<div class="text" style="margin-top:7px">${esc(u.description)}</div>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+  root.querySelectorAll('[data-mechanism]').forEach(b => b.addEventListener('click', () => {
+    selectedMechanism = b.dataset.mechanism; renderMechanisms();
+  }));
+}
+
+document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.view').forEach(x => x.classList.add('hidden'));
+  document.getElementById('view-' + btn.dataset.view).classList.remove('hidden');
+  if (btn.dataset.view === 'models') renderModels();
+  if (btn.dataset.view === 'constraints') renderConstraints();
+  if (btn.dataset.view === 'mechanisms') renderMechanisms();
+}));
+
+renderModels(); renderConstraints(); renderMechanisms();
+</script>
+</body>
+</html>
