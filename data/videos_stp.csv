@@ -614,3 +614,13 @@ But Fast Radio Bursts (FRBs) offer astronomers a way to investigate this otherwi
 In this short explainer, we look at how radio signals are affected by free electrons, what astronomers can measure from those signals, and why separating the contributions from our own galaxy, the host galaxy and intergalactic space isn't quite as straightforward as it might seem.
 
 We also explore the Macquart relationship, which connects the dispersion of these signals with the redshifts of their host galaxies, helping astronomers investigate how ordinary matter is distributed throughout the Universe.",,,,,,,20261013-long
+20261127-long,JWST's Early Galaxies: When the Solution Becomes the Problem,https://youtu.be/ZuOqKL3mPmo,2026-11-27,Cosmology;Timeline;ΛCDM,"The James Webb Space Telescope has revealed far more extremely bright galaxies in the early Universe than many galaxy formation models predicted. But could the explanation be as simple as changing the types of stars these galaxies produced?
+
+One promising proposal suggests that early galaxies formed a greater proportion of massive stars, producing considerably more ultraviolet light without requiring much more stellar material.
+
+It sounds like an elegant solution. But massive stars don't just shine brightly. They also influence how galaxies evolve, potentially working against the very explanation they're intended to provide.
+
+In this video, we examine a new study by Andrea Ferrara and Pratika Dayal that explores what happens when these additional physical consequences are included.
+
+The results reveal an interesting problem with this apparently straightforward explanation, and raise a wider question about how confidently we understand the formation of the earliest galaxies.",,"Ferrara, A., & Dayal, P. (2026). Top-heavy Initial Mass Functions are not enough at cosmic dawn. arXiv:2611.25027.
+Investigates whether a top-heavy initial mass function can explain the unexpectedly bright early galaxies observed by JWST. Finds that the increased ultraviolet luminosity from massive stars is substantially offset by stronger supernova feedback, suppressed star formation and increased dust attenuation, limiting the effectiveness of a top-heavy IMF as a solution. |https://arxiv.org/abs/2611.25027",,,,,20260228-long;20250913-long
